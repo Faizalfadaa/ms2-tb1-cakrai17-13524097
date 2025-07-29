@@ -1,4 +1,4 @@
-!/usr/bin/env python3
+#!/usr/bin/env python3
 
 import rclpy
 from rclpy.node import Node
@@ -7,7 +7,7 @@ from std_msgs.msg import String
 
 class NodeTemplate(Node):
     def __init__(self):
-        super().__init__('new_node')
+        super().__init__('node')
        
         # ==============================================
         # PARAMETER DECLARATION
@@ -17,7 +17,7 @@ class NodeTemplate(Node):
         self.declare_parameter('cmd_type_topic', 'cmd_type')             # Publisher
         self.declare_parameter('cmd_vel_topic', 'cmd_vel')               # Publisher
         self.declare_parameter('autonomous_vel_topic', 'autonomous_vel') # Subscriber
-        self.declare_parameter('publish_rate', 5)                        # 5 message / second (5 Hz)
+        self.declare_parameter('publish_rate', 5.0)                        # 5 message / second (5 Hz)
 
         # ==============================================
         # PARAMETER RETRIEVAL
@@ -28,6 +28,7 @@ class NodeTemplate(Node):
         cmd_vel_topic = self.get_parameter('cmd_vel_topic').get_parameter_value().string_value
         autonomous_vel_topic = self.get_parameter('autonomous_vel_topic').get_parameter_value().string_value
         publish_rate = self.get_parameter('publish_rate').get_parameter_value().double_value 
+        self.get_logger().info(f'Publish rate: {publish_rate}')
 
         # ==============================================
         # PUBLISHERS
@@ -81,6 +82,7 @@ class NodeTemplate(Node):
     def autonomous_vel_callback(self, msg):
         """Callback for autonomous_vel messages"""
         self.current_autonomous_vel = msg
+        self.current_cmd_type = "autonomous"
    
     # ==================================================
     # TIMER CALLBACK
@@ -89,7 +91,9 @@ class NodeTemplate(Node):
     # Create Timer Callabck Function
     def timer_callback(self):
         """Timer callback for publish"""
-        self.cmd_type_pub.publish(String(self.current_autonomous_vel))
+        msg = String()
+        msg.data = self.current_cmd_type
+        self.cmd_type_pub.publish(msg)
         self.cmd_vel_pub.publish(self.current_autonomous_vel)
 
 def main(args=None):
