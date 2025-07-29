@@ -17,7 +17,7 @@ class NodeTemplate(Node):
         self.declare_parameter('cmd_type_topic', 'cmd_type')             # Publisher
         self.declare_parameter('cmd_vel_topic', 'cmd_vel')               # Publisher
         self.declare_parameter('autonomous_vel_topic', 'autonomous_vel') # Subscriber
-        self.declare_parameter('publish_rate', 5.0)                        # 5 message / second (5 Hz)
+        self.declare_parameter('publish_rate', 5.0)                      # 5 message / second (5 Hz)
 
         # ==============================================
         # PARAMETER RETRIEVAL
@@ -28,7 +28,7 @@ class NodeTemplate(Node):
         cmd_vel_topic = self.get_parameter('cmd_vel_topic').get_parameter_value().string_value
         autonomous_vel_topic = self.get_parameter('autonomous_vel_topic').get_parameter_value().string_value
         publish_rate = self.get_parameter('publish_rate').get_parameter_value().double_value 
-        self.get_logger().info(f'Publish rate: {publish_rate}')
+        # self.get_logger().info(f'Publish rate: {publish_rate}')
 
         # ==============================================
         # PUBLISHERS

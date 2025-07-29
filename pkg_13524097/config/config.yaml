@@ -1,0 +1,6 @@
+node:
+  ros__parameters:
+    cmd_type_topic : "cmd_type"
+    cmd_vel_topic : "cmd_vel"
+    autonomous_vel_topic : "autonomous_vel"
+    publish_rate : 5.0
