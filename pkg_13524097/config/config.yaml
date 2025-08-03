@@ -4,3 +4,5 @@ node:
     cmd_vel_topic : "cmd_vel"
     autonomous_vel_topic : "autonomous_vel"
     publish_rate : 5.0
+    joy_vel_topic : joy_vel
+    keyboard_vel_topic : keyboard_vel

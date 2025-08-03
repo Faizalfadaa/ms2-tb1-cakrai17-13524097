@@ -114,6 +114,7 @@ class NodeTemplate(Node):
         with self.lock:
             self.current_cmd_vel = msg
             self.current_cmd_type = "autonomous"
+            self.pq.put((3, self.current_cmd_type))
     
     # Spesifikasi Bonus 2
     def joy_vel_callback(self, msg):
@@ -121,13 +122,15 @@ class NodeTemplate(Node):
         with self.lock:
             self.current_cmd_vel = msg
             self.current_cmd_type = "joy"
+            self.pq.put((2, self.current_cmd_type))
     
     def keyboard_vel_callback(self, msg):
         """Callback for keyboard_vel messages"""
         with self.lock:
             self.current_cmd_vel = msg
             self.current_cmd_type = "keyboard"
-   
+            self.pq.put((1, self.current_cmd_type))
+    
     # ==================================================
     # TIMER CALLBACK
     # ==================================================
@@ -135,17 +138,8 @@ class NodeTemplate(Node):
     # Create Timer Callabck Function
     def timer_callback(self):
         """Timer callback for publish"""
-        msg_type = ["keyboard", "joy", "autonomous"]
-
-        if self.current_cmd_type == msg_type[0]:
-            self.pq.put((1, msg_type[0]))
-        elif self.current_cmd_type == msg_type[1]:
-            self.pq.put((2, msg_type[1]))
-        elif self.current_cmd_type == msg_type[2]:
-            self.pq.put((3, msg_type[2]))
-
         with self.lock:
-            self.current_cmd_type = self.pq.get()[1]
+            _, self.current_cmd_type = self.pq.get()
             msg = String()
             msg.data = self.current_cmd_type
             self.cmd_type_pub.publish(msg)
