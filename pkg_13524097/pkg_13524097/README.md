@@ -19,3 +19,5 @@ Node ini menggunakan priority queue dan threading lock agar semua message yang d
     ros2 launch magang_2025 milestone2.launch.py
 3. Jalankan Node dalam package Anda dengan perintah berikut pada terminal baru:
     ros2 launch pkg_13524097 launch.py
+4. 
+![alt text](diagram.drawio.png.png)
